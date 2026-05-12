@@ -1,13 +1,17 @@
 {
   "name": "n8n-nodes-apogeoapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "n8n community node for ApogeoAPI — IP geolocation, countries, cities, and exchange rates",
   "keywords": [
     "n8n-community-node-package",
     "n8n",
     "geolocation",
     "ip",
-    "countries"
+    "countries",
+    "exchange-rate",
+    "currency",
+    "cities",
+    "states"
   ],
   "license": "MIT",
   "author": {
@@ -24,7 +28,8 @@
     "build": "tsc --project tsconfig.json && gulp build:icons",
     "dev": "tsc --project tsconfig.json --watch",
     "lint": "eslint nodes credentials --ext .ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "release": "npm version patch && git push && git push --tags"
   },
   "files": [
     "dist"
@@ -39,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@n8n/node-cli": "^0.23.0",
     "gulp": "^4.0.2",
     "n8n-workflow": "^1.120.10",
     "typescript": "^5.9.3"
