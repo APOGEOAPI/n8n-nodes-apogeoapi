@@ -231,6 +231,45 @@ export class ApogeoAPI implements INodeType {
           show: { resource: ['exchangeRate'], operation: ['getRate'] },
         },
       },
+
+      // ─── Base Currency (Get Rate + List All Rates) ─────────────────
+      {
+        displayName: 'Base Currency',
+        name: 'baseCurrency',
+        type: 'options',
+        default: 'USD',
+        description: 'Currency the rate is expressed in (default USD)',
+        displayOptions: {
+          show: { resource: ['exchangeRate'] },
+        },
+        options: [
+          { name: 'USD — US Dollar', value: 'USD' },
+          { name: 'EUR — Euro', value: 'EUR' },
+          { name: 'GBP — British Pound', value: 'GBP' },
+          { name: 'JPY — Japanese Yen', value: 'JPY' },
+          { name: 'CHF — Swiss Franc', value: 'CHF' },
+          { name: 'CAD — Canadian Dollar', value: 'CAD' },
+          { name: 'AUD — Australian Dollar', value: 'AUD' },
+          { name: 'CNY — Chinese Yuan', value: 'CNY' },
+          { name: 'HKD — Hong Kong Dollar', value: 'HKD' },
+          { name: 'NZD — New Zealand Dollar', value: 'NZD' },
+          { name: 'SEK — Swedish Krona', value: 'SEK' },
+          { name: 'NOK — Norwegian Krone', value: 'NOK' },
+          { name: 'DKK — Danish Krone', value: 'DKK' },
+          { name: 'SGD — Singapore Dollar', value: 'SGD' },
+          { name: 'MXN — Mexican Peso', value: 'MXN' },
+          { name: 'BRL — Brazilian Real', value: 'BRL' },
+          { name: 'INR — Indian Rupee', value: 'INR' },
+          { name: 'ARS — Argentine Peso', value: 'ARS' },
+          { name: 'ZAR — South African Rand', value: 'ZAR' },
+          { name: 'PLN — Polish Zloty', value: 'PLN' },
+          { name: 'TRY — Turkish Lira', value: 'TRY' },
+          { name: 'KRW — South Korean Won', value: 'KRW' },
+          { name: 'RUB — Russian Ruble', value: 'RUB' },
+          { name: 'AED — UAE Dirham', value: 'AED' },
+          { name: 'ILS — Israeli Shekel', value: 'ILS' },
+        ],
+      },
     ],
   };
 
@@ -289,6 +328,9 @@ export class ApogeoAPI implements INodeType {
             url = `${BASE_URL}/ip/${ip}`;
           }
         } else if (resource === 'exchangeRate') {
+          const base = (
+            this.getNodeParameter('baseCurrency', i, 'USD') as string
+          ).toUpperCase();
           if (operation === 'getRate') {
             const currency = (
               this.getNodeParameter('currencyCode', i) as string
@@ -296,6 +338,9 @@ export class ApogeoAPI implements INodeType {
             url = `${BASE_URL}/exchange-rates/${currency}`;
           } else if (operation === 'listRates') {
             url = `${BASE_URL}/exchange-rates`;
+          }
+          if (base && base !== 'USD') {
+            qs['base'] = base;
           }
         }
 
