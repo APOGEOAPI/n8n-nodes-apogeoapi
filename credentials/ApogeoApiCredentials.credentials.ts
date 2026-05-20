@@ -1,4 +1,9 @@
-import { ICredentialType, INodeProperties } from 'n8n-workflow';
+import {
+  IAuthenticateGeneric,
+  ICredentialTestRequest,
+  ICredentialType,
+  INodeProperties,
+} from 'n8n-workflow';
 
 export class ApogeoApiCredentials implements ICredentialType {
   name = 'apogeoApiCredentials';
@@ -15,4 +20,20 @@ export class ApogeoApiCredentials implements ICredentialType {
       description: 'Get your API key at https://apogeoapi.com',
     },
   ];
+
+  authenticate: IAuthenticateGeneric = {
+    type: 'generic',
+    properties: {
+      headers: {
+        'X-API-Key': '={{$credentials.apiKey}}',
+      },
+    },
+  };
+
+  test: ICredentialTestRequest = {
+    request: {
+      baseURL: 'https://api.apogeoapi.com/v1',
+      url: '/countries/AR',
+    },
+  };
 }

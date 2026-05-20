@@ -319,7 +319,7 @@ export class ApogeoAPI implements INodeType {
           .join('&');
         const fullUrl = queryString ? `${url}?${queryString}` : url;
 
-        const responseData = await this.helpers.request({
+        const responseData = await this.helpers.httpRequest({
           method: 'GET',
           url: fullUrl,
           headers,
