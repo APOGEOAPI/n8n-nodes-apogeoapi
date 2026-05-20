@@ -238,12 +238,9 @@ export class ApogeoAPI implements INodeType {
     const items = this.getInputData();
     const returnData: INodeExecutionData[] = [];
 
-    const { apiKey } = (await this.getCredentials('apogeoApiCredentials')) as {
-      apiKey: string;
-    };
-
+    // Auth is injected by httpRequestWithAuthentication from the credential's
+    // `authenticate` definition (X-API-Key header) — no manual getCredentials.
     const headers = {
-      'X-API-Key': apiKey,
       'Content-Type': 'application/json',
     };
 
@@ -319,12 +316,16 @@ export class ApogeoAPI implements INodeType {
           .join('&');
         const fullUrl = queryString ? `${url}?${queryString}` : url;
 
-        const responseData = await this.helpers.httpRequest({
-          method: 'GET',
-          url: fullUrl,
-          headers,
-          json: true,
-        });
+        const responseData = await this.helpers.httpRequestWithAuthentication.call(
+          this,
+          'apogeoApiCredentials',
+          {
+            method: 'GET',
+            url: fullUrl,
+            headers,
+            json: true,
+          },
+        );
 
         // Normalise: if the response is an array, spread it; otherwise wrap it
         if (Array.isArray(responseData)) {
