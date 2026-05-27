@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-apogeoapi",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "n8n community node for ApogeoAPI — IP geolocation, countries, cities, and exchange rates",
   "keywords": [
     "n8n-community-node-package",

@@ -4,6 +4,8 @@ import {
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
+  JsonObject,
+  NodeApiError,
   NodeOperationError,
 } from 'n8n-workflow';
 
@@ -390,7 +392,14 @@ export class ApogeoAPI implements INodeType {
           });
           continue;
         }
-        throw error;
+        // Re-throw NodeOperationError as-is (e.g. unknown resource/operation guard above)
+        if (error instanceof NodeOperationError) {
+          throw error;
+        }
+        // Wrap any HTTP / runtime error so n8n's UI shows status code + response body
+        throw new NodeApiError(this.getNode(), error as JsonObject, {
+          itemIndex: i,
+        });
       }
     }
 
